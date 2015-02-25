@@ -1,6 +1,6 @@
 //Define Margin
-var margin = {left: 80, right: 80, top: 50, bottom: 50 }, 
-    width = 960 - margin.left -margin.right,
+var margin = {left: 80, right: 80, top: 50, bottom: 50 },
+    width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 //Define Color
@@ -50,7 +50,30 @@ function(data) {
         .attr("r", function(d) { return Math.sqrt(d.total)/.2; })
         .attr("cx", function(d) {return xScale(d.gdp);})
         .attr("cy", function(d) {return yScale(d.epc);})
-        .style("fill", function (d) { return colors(d.country); });
+        .style("fill", function (d) { return colors(d.country); })
+        .on("mouseover", function (d) {
+            "use strict";
+            
+            var xPosition = parseFloat(d3.select(this).attr("x"));
+            var yPosition = parseFloat(d3.select(this).attr("y"));
+
+            //Update the tooltip position and value
+            d3.select("#tooltip")
+                .style("left", event.pageX + "px")
+                .style("top", event.pageY + "px")
+                .select("#value")
+                .text(d.country + "\nPopulation:" + d.population + "Million\n" + "GDP:" + d.gdp + "Trillion\n" + "EPC:" + d.epc + "Million BTUs\n" + "TEC:" + d.total + "Trillion BTUs");
+                
+            //Show the tooltip
+            d3.select("#tooltip").classed("hidden", false);
+
+        })
+        .on("mouseout", function () {
+
+            //Hide the tooltip
+            d3.select("#tooltip").classed("hidden", true);
+
+            });
     //Add .on("mouseover", .....
     //Add Tooltip.html with transition and style
     //Then Add .on("mouseout", ....
